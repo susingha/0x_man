@@ -1,0 +1,712 @@
+
+________________keywords
+
+extern etext;
+extern edata
+extern end
+
+________________storage class specifiers	CP25 (see page 25 of kanethkar)
+extern	    extern int i, this is only the declaration of i.
+            It specifies that i has been actually defined in a separate file as a global variable.
+            Applies only in case of global variables.
+            CP615 v.imp	extern is also used for linkage specification, viz: extern "C" void myfunc(); (do not name mangle)
+            an extern declaration can appear anywhere in the program.
+            even inside a function. does not make it a local variable.
+            but then u have to declare it inside every funtion you refer it in.
+static	    static int i=100 will be executed only once even if the function(in which it appears) is called more than once,
+            and i will retain it's value between different function calls though i would not exist outside the funcion body.
+            static local variable declaration, definition and initialization is done at compile/load time.
+            static int i = j; // is not allowed.
+            a static class member variable is actually a global variable but has a scope only in the class.
+            hence it has a single instance for the whole class.
+            and hence it cannot be initialized in a constructor which may have many instances (but can be accessed r/w).
+            it should be initialized outside the class using :: (also data type to be specified).
+            a static class function doesnt have access to the this pointer of the class and can be called even when the class hasnt been instantiated
+            CP600 V.V.imp	anonymous namespace / unnamed namespace
+	    static functions in C is useful as follows:
+	    http://codingfreak.blogspot.in/2010/06/static-functions-in-c.html
+register    keep the value of a variable in a CPU register rather than in the memory. fast. 
+            Only local variables can be stored in CPU, not global variables.
+            too many register variables may slow down operation cuz if as many registers are not avaiblable then
+            the cpu would spend much of the time copying reg variables between regs and main memory
+            plus it is only a suggestion to the compiler, it may decide to ignore the specifier and default to auto
+auto		to define local variables, default, not used
+
+________________qualifiers
+const		make a variable or pointer constant.
+            The variable cannot change its value later. 
+            The pointer cannot its target later. 
+            Declaration and definition must B in the same statement. 
+            making a function const means that the function cannot modify the object that invokes it
+volatile	the variable can B changed by some other way that is not mentioned in the program, some external cause, 
+            for example if we if we entitle a variable to store the current time, 
+            it will change without notice.
+            making a function volatile causes 'this' pointer to be treated as volatile
+
+            volatile in linux kernel this is given to varialbles that point to hardware registers. 
+            tells the compiler not to do any optimization or create local copies of the variable 
+            because the hardware register may change value without notice. 
+            in this context, const volatile means that this variable points to a hardware register and is Read Only. 
+            i.e the processor cannot change the variable but the device can.
+
+
+________________5 ways to create custom data types in C
+struct
+bit-field	assign boolean values to bits not bytes. syntax is almost similar to struct declaration. CP175-176ComRef.
+                they pad up to integer boundaries.
+union		same as struct except that all the member variables share the same memory space,
+		the memory given to a union is equal to the size of the largest member variable. Used in case of data type conversion.
+anonymous union	no name, no memeber function, no objects, all data members has same scope as any local variable,
+	        they cannot be protected or private, global anonymous union must be static. CP297
+enum		used to declare enumerated DATA TYPES that hold only a specific set of values definable by user.
+                then we define variables of that enumerated data type. both of these are done with the enum keyword.
+		enum enum_type {a=12, b=13, c=14};		//default is a=0, b=1, c=2
+		enum enum_type enum_var = a;
+typedef		make aliases of known data types. typedef int alias_to_int
+
+
+________________data types: 5 C types + 2 C++ types
+void
+int
+float
+double		double precision floating point number
+char
+bool
+wchar_t
+
+
+________________data type modifiers	CP15ComRef
+signed
+unsigned
+short
+long
+
+
+________________format specifiers in printf()	CP196
+%c	character
+%d	signed decimal integers
+%i	signed decimal integers
+%ld	long int
+%lld	long long int
+%e	lowercase scientific notation
+%E	uppercase scientific notation
+%f	decimal floating point
+%lf	double
+%Lf	long double
+%g	uses %e or %f, which ever is shorter
+%G	uses %E or %F, which ever is shorter
+%o	unsigned octal
+%s	string of characters
+%u	unsigned decimal integers(often used to show values of pointers i.e. memory addresses)
+%x	unsigned hexadecimal in lowercase
+%X	unsigned hexadecimal in uppercase
+%p	displays a pointer
+%n	the associated argument must be a pointer to an integer, puts the no of character written so far to that integer.
+%%	prints a '%'
+
+
+________________backslash constants/codes	CP34
+\b	backspace
+\f	form feed
+\n	new line
+\r	carriage return
+\t	hor tab
+\"	double quote
+\'	single quote
+\0	null
+\\	backslash
+\v	ver tab
+\a	alert
+\?	question mark
+\N	octal constant(N is an octal number)
+\xN	hex constant(N is a hex constant)
+
+
+________________some isolated statements sometimes useful
+y = x > 9 ? 100 : 200;
+x = (y=3, y+1);			CP51
+x = 10/y ~(127/x);		CP55
+
+________________precedence of C operators	
+CP53
+
+
+________________bitwise operators(applicable on int and char only, not on float and double) CP42
+~		ones compliment
+>>		right shift
+<<		left shift
+&		bitwise AND
+|		bitwise OR
+^		bitwise XOR
+
+<< leftshifting insert a 0 at the right end
+>> rightshifting inserts the leftmost bit at the left end
+1 is 00....001 and not 100....00
+-1 is 11.....1111 (2s compliment form)
+
+
+________________functions
+void exit(int return_code);		<process.h><stdlib.h>	return_code : 0(default), 1, 2.., EXIT_SUCCESS, EXIT_FAILURE
+int sscanf(char*,"",,,,);		<stdio.h>		take the input from a string instead of the console; returns the no of inputs taken from the string
+int sprintf(char*,"",,,);		<stdio.h>		send the outputs to a string instead of the console; returns the no of characters sent to the string
+
+FILE* fopen("c:\\sup.txt","r");		<stdio.h>
+
+r	(read only)return the file descriptor or NULL on failure; points to 1st character
+r+	same as "r" plus read,write,modify
+w	(write only)create the file and/or return the file descriptor or NULL on failure; points to 1st character
+w+	same as "w" plus read,write,modify
+a	(append only)create the file and/or return the file descriptor or NULL on failure; points to the EOF character of file
+a+	same as "a" plus read
+
+rb	open in binary mod
+e
+
+int fputc(char, FILE*)			<stdio.h>	returns the (int)character written
+int fgetc(FILE*)			<stdio.h>	returns the (int)character read
+
+char* fgets(char* s, int size, FILE*)	<stdio.h>	returns the pointer to the string s
+int fputs(char* s, FILE*)		<stdio.h>	returns the (int)character written last
+
+int fscanf(FILE*,"",,,,);		<stdio.h>	take the input from a file stream instead of the console; returns the no of inputs taken from the file
+int fprintf(FILE*,"",,,);		<stdio.h>	send the outputs to a file stream instead of the console; returns the no of characters sent to the file
+
+fscanf and fprintf has a disadvantage that it stores the numbers in string form.
+so numbers with more digits take more space. solution is open the file in binary mode and use fread and fwrite
+
+fread(&e, sizeof(e), 1, fp)
+fwrite(&e, sizeof(e), 1, fp)
+
+getchar		waits for CR
+putchar
+gets
+puts
+getch		doesnt wait for CR
+getche		doesnt wait for CR
+
+asm ("opcode")				execute 'opcode' as assembly code:
+
+some more functions to remember the prototype of:
+stpcpy() // can sometimes be used for concatenating strings
+strcpy()
+strncpy()
+// the pointers in above functions may NOT overlap
+
+
+________________processing algo
+maincode.c ---- preprocessor ---> expandedcode.i ---- compiler ---> objectcode.obj ---- linker ---> executablecode.exe
+differnt passes of a compiler:
+http://www.delorie.com/gnu/docs/gcc/gccint_30.html
+
+
+nm outputs:
+http://www.thegeekstuff.com/2012/03/linux-nm-command/
+    A :  Global absolute symbol.
+    a :  Local absolute symbol.
+    B : Global bss symbol.
+    b : Local bss symbol.
+    D : Global data symbol.
+    d : Local data symbol.
+    f : Source file name symbol.
+    L : Global thread-local symbol (TLS).
+    l : Static thread-local symbol (TLS).
+    T : Global text symbol.
+    t  : Local text symbol.
+    U : Undefined symbol.
+switches: nm - [complete this]
+Here's a list of Linux tools that can be used to explore object/executable files.
+    ar: creates static libraries.
+    objdump: this is the most important binary tool; it can be used to display all the information in an object binary file.
+    strings: list all the printable strings in a binary file.
+    nm: lists the symbols defined in the symbol table of an object file.
+    ldd: lists the shared libraries on which the object binary is dependent.
+    strip: deletes the symbol table information.
+
+
+________________miscellaneous
+
+In a RISC architecture, all machine scalars are loaded into registers
+before being operated upon, while in a CISC architecture, one or more machine-scalar operands
+may reside in storage.
+
+________________some compiler directives you'll probably never use
+#pragma startup fun1()	execute fun1 at startup, before main()
+#pragma exit fun2()	execute fun2 at exit, just after main()
+#pragma warn -rvl	suppress the warning "no return value" in a function
+#pragma warn -par	suppress the warning "parameter not used" in a function
+#pragma warn -rch	suppress the warning "unreachable code"
+
+
+________________pre defined MACROS
+__LINE__
+__FILE__
+__DATE__
+__TIME__
+
+token merging operator ##
+
+
+buffer overflow and stack smaching: ref: http://www.securitytube.net/video/232
+===================================
+disassemble a binary(elf) to get its assembly instructions equivalent
+object dump a binary(elf) to get its binary machine code equivalent
+
+assembly instruction of a system call looks like:
+mov $<the syscall number from the syscall table> %eax    // according to in unistd.h
+int $0x80
+
+minimal sample assembly code to be written as text into a .s file
+////////// prog.s ///////////////
+.text
+.globl _start
+	_start :
+		movl $20, %ebx
+		movl $1, %eax
+		int $0x80
+/////////////////////////////////
+$ as -o prog.o prog.s
+$ ld -o prog prog.o
+$ objdump -d prog
+$ objdump -x prog | grep NEEDED
+
+char machinecode[] = "\xbb\x14\x00\x00\x00"; // this would write in hex into a char array. the array would contain:
+                                             // 0xbb, 0x14, 0x00, 0x00, 0x00 or
+                                             // 187   20    0     0     0
+
+
+gdb:
+====
+disas <function name>           // disas main
+list                            // will print you the code as is with line numbers
+break <line number>             // line number obtained from the list command above.
+                                // break 12 will break your code 'after' executing line 12 and 'before' executing line 13
+x/8xw $esp                      // prints the top portion of the stack
+x/1s
+disas <stack return address>    // prints the code at that return address (or any address)
+print /x <local variable>       // prints the local variable in hex
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+useful links:
+=============
+const:
+http://www.gamedev.net/topic/534039-c-const-is-const-char-const-reasonable
+anatomy of assignment operator
+http://icu-project.org/docs/papers/cpp_report/the_anatomy_of_the_assignment_operator.html (one day ill read and understand this)
+anatomy of a process:
+http://duartes.org/gustavo/blog/post/anatomy-of-a-program-in-memory
+Linkers:
+http://www.lurklurk.org/linkers/linkers.html
+http://www.linuxjournal.com/article/6463
+differnt passes of a compiler:
+http://www.delorie.com/gnu/docs/gcc/gccint_30.html
+Linker Scripts:
+http://sources.redhat.com/binutils/docs-2.10/ld_3.html#SEC33
+Embedded Programming with the GNU Toolchain:
+http://www.bravegnu.org/gnu-eprog/index.html
+http://www.thegeekstuff.com/2011/10/gcc-linking/
+nm outputs:
+http://www.thegeekstuff.com/2012/03/linux-nm-command/
+buffer overflow and more:
+http://www.securitytube.net/video/232
+
+
+some OOP disciplines to be obeyed
+=================================
+# an object should be able to initialize itself to a default state. much like some module in a machine. such that it can be used to some extent by a user by doing absolutely nothing or atleast something
+# check if a class needs a userdefined copy constructor or an assignment operator. it should be able to initialize itself to a usable state by copying appropriate things from another object of the same class
+# creating user defined constructor / copy constructor enables you to control wheather any user can copy your object or initialize it or not. which would otherwise be made public by the compiler by default. for eg: you wouldnt want a user to initialize ur device unless s/he provides you a password.
+# difference between a copy constructor and an assignment operator:
+  a copy constructor may copy the state of an object in one world and 'construct' another object in an equivalent state. (in a different world say)
+  a copy asignment operator should copy the state of one object and paste it onto a different existing object (in the same world say)
+  what ever it does copies or contructs, it does so with the state of the objects. not exactly the contents of the objects. to be underatood wrt real world situations. copy constructor generally constructs a new object from a raw state (writes on garbages), copy assignment operators might by overwriting the state of an object with the state of another object  
+
+C++ Gyan:
+=========
+virtual functions cannot be static
+virtual functions cannot be friends
+calling a virtual function is slower then non-virtual functions because of all the resolution through the vtable/__vptr stuff.
+constructors cannot be virtual
+destructors can be virtual
+a global static has a file scope. cannot be externed
+
+binding means converting the name of a function (while doing a function call) into a machine address (an address on the RAM) to where the processor should jump and start executing so as to execute the function.
+so while returning from a function how does the processor know where to end the execution of the function and return to the main flow
+early binding = static binding. done at compile time. normal function calls
+late binding = dynamic binding. done at run time. (slower). indirect function calls using a function pointer, calling derived virtual functions via base class pointer (polymorphism)
+
+abstract classes r those that has atleast 1 'not properly defined' function, viz: a pure virtual function
+so abstract classes cannot have objects
+but they can have pointers and reference
+
+base pointer can point to a derived class object. reverse is not true
+
+COPY CONSTRUCTOR
+implicit copy contructor and default copy assignment operators are provided by the compiler to every class. which if used in the default state would perform a shallow copy between two class objects. this is a normal bitwise copy. this can prove to be a problem if we do dynamic memory allocation in the class. we may end up freeing the same memory location Twice from the destructor.
+hence override the copy constructor and assignment operator and perform a deep copy manually.
+
+what gets called when:
+class_t a;     // constructor
+class_t a(b);  // copy constructor. Q: what gets called first constructor or copy constructor
+class_t a = b; // copy constructor. Q: what gets called first constructor or copy constructor
+a = b;         // copy assignment operator
+
+argument to a copy constructor is always passed by reference and never by value. if we pass by value, it would mean copying the class object and calling the copy constructor again n again recursively. would eat up stack. it gives a compile time error.
+
+a overriden copy assignment operator should return *this. so that a = b = c can be realised.
+
+why we need:
+file a ("file1");
+file b ("file2");
+a = b;
+it could mean:
+1. forget file1 and make 'a' represent file2 (default)
+2. copy contents of file2 to file1 (needs to be implemented using deep copy)
+have a read...
+http://icu-project.org/docs/papers/cpp_report/the_anatomy_of_the_assignment_operator.html
+
+
+#include<typeinfo>
+int i;
+typeid(i).name()	returns "int"
+clss obj;
+typeid(obj).name()	returns "class"
+typeid(int)		is also valid
+
+
+inserter
+ostream &operator<<(ostream &stream, clss &obj)
+{stream << obj.a;}
+
+
+extractor
+istream &operator>>(istream &stream, clss &obj)
+{stream >> obj.a;}
+
+. :: .* ? cannot be overloaded
+
+type conversion functions
+convert from a class type to intege type (say) CP605
+
+
+checklist: C++ concepts to know before every interview.
+=======================================================
+overloading & overriding
+friend function
+polymorphism
+exception handling
+standard template library
+template mechanism
+namespace
+macro
+virtual functions
+virtual base class
+operator overloading
+copy constructor
+static cast and dynamic cast
+
+
+
+#if programming cautions to keep in mind
+====================================
+
+try to divide problems into subproblems
+variable names should be readable and informative
+
+arr[4][3] is actually 4 rows of 3 cell arrays. not the other way.
+look for array overflows and underflows as well. even inside if(), for(), while() conditions
+always try to initialize variables when you create them. especially pointers (NULL them)
+malloc and free only allocates / deallocates memory regions. does not do anything to the pointer variables used to track the allocated memory region.
+make sure the pointer variable is made NULL after it is used to free(). make sure the malloc() call is always checked for what it returns.
+see more malloc notes below.
+the above applies to function pointers too. check them for NULL before calling
+try to avoid static local variables. they are basically global variables and occupy space throughout the process lifetime.
+try to club large sets of variables in structs if you need them to be passed around. also pass large structures into function using pointers instead of by value. in c++ use const references
+if an if() has multiple conditions check if assertion of one condition may affect the inputs of another condition. same goes for for()s and while()s
+using static local variables in functions makes the function thread unsafe. consider locking them.
+dont return addresses of local arrays. they wont stay in place after the function returns (stack entry is removed)
+crosscheck starting and ending iteration in a loop for sanity wrt all above points
+if using char arrays for strings better remember the '\0'
+beware of pre-increments and post-increments in combination of other variables and esp inside macros
+when using a function which may block, be careful about using the blocking version. because you may expect the function to return immediately, but in a corner case it may not return immediately and block, and the whole system is halted. instead prefer using the non-blocking version or the timeoutable version and incase the function unblocked without returning, have a way (loop say) to call it again at a later time.
+dont allow functions to return junk values.. make sure it returns only a known / intended set of values
+create structures with variables on proper boundaries.. so its easier for the processor to access the members
+malloced stuff can have a refcount sort of thing. to track the no of people using it. and not free it when it could be used by somebody.
+when freeing a pointer, its better not to reset the memory area to zero before freeing cuz in case somebody else is holding a reference to this memory area, he may still be able to use it. else it might crash. but then this argument is situation dependent
+passing a string literal to a function is allowed. and the function can also catch it as an argument in a uninitialized, unmalloced local char * pointer. but check if such a string literal permanently stays in the global memory (or anywhere else) or not
+
+use of a do {} while(0) in macros from breaking / returning point of view
+its also used instead of using goto: to get to the end of a function to the function exit point in case of a fail case in the middle of a function.
+http://stackoverflow.com/questions/257418/do-while-0-what-is-it-good-for
+
+at times we need to associate returned error codes to strings for printing. a good way to do it
+enum diagStatus {
+    MOD_DIAG_NA = 0,
+    MOD_DIAG_BYPASS = 1,
+    MOD_DIAG_PASS = 2,
+    MOD_DIAG_UNKNOWN = 3,
+    MOD_DIAG_MAJOR = 4,
+    MOD_DIAG_MINOR = 5,
+};
+static char *diagStatus[] = { "Not Applicable", "Bypass", "Pass", "Unknown",
+                              "Major Error", "Minor Error", };
+
+at times you do a lot of steps in funciton.. say 10 of them. now you wanna group 5 of them on one function and 5 of them in another. make sure the two sub functions that you are creating goes up to the same depth downstream (inside the driver say)
+
+when printing something.. try to print as much of the whole string from a single printf and in a single line. its easier to grep for in the long run
+
+often in a function we do a lot of functions using sub functions. say f1, f2, f3, f4, f5.. in the course f3 fails. now we need to exit and also revert whatever f1, f2 did. hence its best to keep track of how many fns succeeded before a failure and undo all those by calling all those fn in reverse order and passing disable. i.e. have an enable / disable argument for all fns. in C++ its sometimes easier, by just deleting an object, but in C this may not be that simple. think if its possible to catch/record all the preceeding functions in a stack sort of thing and then calling the functions in the stack in reverse and disable once something fails
+
+often while debugging we see large structures and we need to print almost all the fields in the struct. its easier to have a print_struct_name() kinda function per structure that prints all the fields of the struct along with every struct definition in the same header file itself.
+but what if the struct has sub structs ? the print_struct_name() can call the corresponding print_struct_name2() for the sub struct. and make sure its printed in a nice tabbed format. we can pass on how may tab spaces to print to each function
+every structure definition could have a function pointer as well that could actually point to the above kind of function.
+not sure if a struct can actually hold a function itself instead of a function pointer and having to initialize it explicitly and risk pointer exceptions.
+similarly every structure could also have functions that can write out this struct in big or small endian format as needed.
+
+way to represent a mac address:
+uChar dest_mac[IEEEBYTES = 6] = {0x00, 0x00, 0x00, 0x00, 0x02, 0x02};
+
+at times in a large code base, a struct is defined in hundreads of places (header files).. how to find out which header file is being used. just define the macro / struct again. the compiler will complain about the previous definition. or use nm
+
+use function pointers between layers, instead of statically linked function calls.. so that you can inject code (insmod) and change the code flow at run time
+
+declaring global variables in header files should always be externed. else every includer will define their own version of the variable.
+be careful with endian-ness while dealing memcpy, memcmp, fread, fwrite, etc kind of dumb utilities which doesnt know about variable sizes
+in little endian, the bytes would be read in the reverse order than big endian
+the endian problem mostly occurs when dealing with different computers as in:
+a variable written into a file on a little endian machine. this file gets copied into a big endian machine and the big endian machine tries to read the variable from this file. (there must be some way to specify if a file is big or little endian !!)
+a variable written into memory on a little endian machine. this variable gets byte transmitted via network to a big endian machine n it tries to read the variable in its own way.
+http://www.ibm.com/developerworks/aix/library/au-endianc/index.html?ca=drs- (yet to read)
+
+packed structures are slower although they may save space. but then they are inevitable when using them to access memory mapped device registers. but still can be avoided strategically
+
+scalable architectures (by debayan)
+http://lethain.com/introduction-to-architecting-systems-for-scale/?n087e=t
+
+int function(int i) {
+    static char * ptr = "ONE STRING";
+    if(i) {
+	ptr = "ANOTHER STRING";
+    }
+    return ptr;                   // this is allowed. 1. ptr is in static region.
+                                                      2. the strings are in global region too.
+}
+
+avoid system() and popen(). they are vulnerable to command injection
+
+When you define a structure, make sure varialbles are arranged according to locality. side effects of using pointers in structures: you lose the locality. also happens when you pass around structures by pointers. read about containers
+
+side effects of union: someone adds a huge structure/member variable in the union set.. the structure permanently gets much larger irrespective of union usage
+
+mmap may be used to populate structures into a file and then when a program is restarted, the file is mmap'ed again and the structures are restored. Only catch being the pointers would be invalidated.
+
+locking:
+if you lock, unlock before every exit point. more granular the locks the better
+when ever you need to have locks on multiple objects or want to have multiple locks, assertain all your locks and lock in order
+no mallocs inside spinlock. but may be inside mutexes
+dont use mutex for protecting the mere increment of an integer. use a spinlock instead
+if mallocs are inside spinlocks they should be GFP_ATOMIC. check caveats related to GFP_ATOMIC
+if adding/removing something to a queue, make sure to update housekeeping variables like size, element count, start and end indexes, etc
+what to lock ? the queue, globals, queue house keeping variables
+
+
+more malloc notes: best way to avoid malloc free memory leaks
+When pointers are used, they should be not NULL, when they are not used, they should be NULL.
+hence easier for malloc and free to check if pointers are valid or invalid before poking with them.
+initialize all ur pointers to zero in the beginning
+when mallocing, always check if ptr was == NULL or not. if it wasnt NULL, may be the pointer was being used. dont overwrite and create a leak.
+	if(ptr == NULL) {
+    		ptr = malloc();
+		if(!ptr) {
+		    // no memory. so return or goto ??
+		    // if you wanna return, release all previous memories, cleanup and then return
+		    // if you wanna goto, set the error message and goto the cleanup
+		}
+	} else {
+	    // ptr is being used by someone else.
+	    // either free(ptr) before re-attempting a malloc
+	    // or malloc to a different pointer than ptr
+	    // do something else instead of mallocing
+	}
+when freeing, always check if ptr was != NULL or not. it was NULL, it was already freed or never malloced. so dont attempt freeing it. if you free it, initialize the ptr to NULL after freeing
+	if(ptr != NULL) {
+    		free(ptr);
+		ptr = NULL;
+	}
+when cleaning up, below a bookmark, check all the pointers for ! NULL before calling free on them.
+out:
+	if(ptr1 != NULL) {
+    		free(ptr1);
+		ptr1 = NULL;
+	}
+	if(ptr2 != NULL) {
+    		free(ptr2);
+		ptr2 = NULL;
+	}
+
+
+#endif
+
+more junk cautions to keep in mind:
+===================================
+there is a difference between
+char * arr = "abcd"; and // this is same as const arr[] = "abcd". cant be used to change the array
+char arr[] = "abcd";     // this is not const. can be used to change the array
+also note:
+char * arr1 = "abcd";
+char * arr2 = "abcd";
+both arr1 and arr2 will be pointing to the same location which will contain "abcd". because the string literal is same in both statements.
+
+http://www.gamedev.net/topic/534039-c-const-is-const-char-const-reasonable
+const int * const p;		 -> p is a const pointer to an integer which is const
+int const * const p;		 -> p is a const pointer to a const integer
+int const * p;			 -> p is a pointer to a const integer
+int * const p;			 -> p is a const pointer to an integer
+int * p;			 -> p is a pointer to an integer
+int const ** const p;		 -> p is a const pointer to a pointer to const integer
+int const * const * const p;	 -> p is a const pointer to a const pointer to const integer
+int const * const * const & p;	 -> p is a reference to a const pointer to a const pointer to const integer
+int const * const & p;		 -> p is a reference to a const pointer to const integer 
+
+
+somethings about functions that need to return char*
+in C++ just use a string no issues.
+in C, you should not return the address of a local variable. because it would reside in a stack and may be overwritten in later function calls
+alternatively you can make your local variable static (so it resides in the data segment) and would not be overwritten. but will not be thread safe. because some other call to this function from another thread may write at the same location and your call will not return you expected results. as a workaround you may change the variable inside a critical section. fine.
+you may also return a malloc'ed address but then somebody else must free it. otherwise multiple calls will keep on eating the heap.
+best thing is to feed the function call with a char* and length and the function write at the local passed on to it.
+http://stackoverflow.com/questions/3647953/when-a-third-party-c-function-returns-a-pointer-should-you-free-it-yourself
+
+
+char arr[y][x]
+//->>>	char arr*;	scanf("%s",arr);	//this is a wrong code because arr has a garbage value,
+                                                  we need to use malloc, to put a memory address in arr. CP325kanethkar
+ASCII for EOF = 26
+main( int argc , char* argv[] )                 // thats the format in case you forget
+
+if a functions is only declared and not defined in a file,
+its by default taken as extern. (we may/not mention extern explicitly in such cases)
+
+declaration -> definition -> initialization
+declaration: making the compiler known that there is some entity with this type and/or name.
+             this would begin to exist sooner(during compilation) or later(during linking)
+definition: giving a shape to that entity and putting it on memory
+initialization: filling up that memory with meaningful data
+
+
+size of short... 2
+size of int... 4
+size of long... 4	(same as long int)
+size of long long... 8	(same as long long int)
+size of float... 4
+size of double... 8
+size of long double... 12
+size of void*... 4
+a loner void is not allowed. (like void i; is not allowed)
+
+fscanf and fprintf has a disadvantage that it stores the numbers in string form.
+so numbers with more digits take more space. solution is open the file in binary mode and use fread and fwrite
+
+whats:
+stack pointer
+frame pointer
+activation record
+stack frame unwinding
+
+
+
+known errors and solutions.
+===========================
+dereferencing pointer to incomplete type.
+    happens when u have typedefed a struct and declaring a variable using
+    struct <typdefed name> <variable>
+    change it to
+    <typedef name> <variable>
+warning: type defaults to 'int' in declaration of...
+    happens in the opposite case of above
+Each undeclared identifier is reported only once for each function it appears in.
+    generally comes coupled with some implicit declaration error.
+    resolve the implicit declaration error. this should go.
+invalid type argument of 'unary *'
+    when u try to dereference a variable which is not a pointer. i.e if i is
+    not a pointer, u try to do *i;
+multiple storage classes in declaration specifiers
+    happens when the extern fn u are declaring has is a global static in
+    another file. a global static has a file scope. cannot be externed
+Passing arg from incompatible pointer type
+    happens mostly in case of predefined(viz: proc) call back functions. when u dont give
+    proper arguments to the declaration and definition as expected. check if no.
+    arguments and their types are proper. i.e you are not free to declare and define user defined type
+    of arguments to this function.
+rare C++ trivia
+    there was a base class and a derived class.
+    made a pointer to the derived and initialized it to a 'new derived'.
+    used this pointer to call a dfun that existed only in the derived.
+    dfun called a bfun that existed only in the base.
+    bfun called a vfun that existed as virtual in base and overriden in derived.
+    IF we make vfun of derived as const like: [ int vfun() const { ], the base vfun gets called else derived vfun gets called.
+non-lvalue in assignment
+    use == in if statements
+undefined reference to vtable
+    a virtual function declared but not defined
+
+common C errros: just have a look
+http://www.drpaulcarter.com/cs/common-c-errors.php
+
+
+
+NOT SO FAQS:
+============
+
+are the scheduler, context switcher, isr despatcher, page swapper, etc run as one threads each ?
+if so are these threads scheduled ?
+when the scheduler sleeps after scheduling a context (kernel thread say), and the context goes into a inf loop, who schedules it out ?
+how does the scheduler wake up to do that. who wakes it up ?
+
+what about when RAM size is less than 1GB in a 3GB-1GB split.
+considering that kernel takes 1GB virtual space and kernel never gets swapped out.
+how does it makes sense
+
+if the memory mapped region can be virtually mapped to a common ram location
+for use in shared memory, why cant a normal virtual address be done so. like a
+static variable or a heap location.
+    i think this question doesnt make sense.
+
+does the kernel control how much virtual memory can be assigned to a process
+at max. or it can increase upto a whole of 3GB (the non-kernel part)
+    i think it can increase upto a whole of 3GB.
+
+what exactly happens in a context switch. how many variables from the pcb needs to be
+saved / loaded. time taken for the total process. an idea.
+time taken for a memory access in a modern machine. a = 2; 
+
+c++ sometimes crashes while returning a function if a new variable has been
+declared towards the end of the function. i.e in c we need to give all
+declarations at the start of a function, which is not compulsory in C++ but in
+some cases it crashes. why?
+
+how to get and examine a core dump
+
+what is a BFD ? (http://sources.redhat.com/binutils/docs-2.10/ld_toc.html#SEC_Contents)
+
+what are LMA (Load Memory Address) and VMA (Virtual Memory Address) wrt linkers
+
+difference between CPU % usage and Load Avereage
+http://www.linuxjournal.com/article/9001
+
+containers ??
+
+out of band data structure, variable length data structres. use a char arr[0] insode a struct. but the compiler might optimize it, hence just make it arr[1] for the sake of it.
+

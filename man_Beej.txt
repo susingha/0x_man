@@ -1,0 +1,47 @@
+////////////////////////////headers files used
+winsock.h					for windows
+$ cc -o server server.c -lnsl -lsocket -lresolv	for solaris
+
+
+////////////////////////////structures used
+struct sockaddr_in
+{
+	short int		sin_family;
+	unsigned short int	sin_port;	stores the port no in NETWORK byte order
+	struct in_addr		sin_addr;	stores the ip address
+	unsigned char		sin_zero[8];	stores just zero. done with memset() function
+}
+
+struct in_addr
+{
+	unsigned long 		s_addr;		stores the ip address
+}
+
+
+////////////////////////functions commonly used
+i = htons(8000)
+i = ntohs(8000)
+i = htonl(8000)
+i = ntohl(8000)
+n: network | h: host | s: short | l: long
+
+void *memset(void *s, int c, size_t n)
+inet_addr()
+inet_aton(,)					bettr than inet_addr : ascii to network
+inet_ntoa()							     : network to ascii
+
+
+socket(,,); connect(,,); send(,,,); recv(,,,)
+socket(,,); bind(,,); listen(,); accept(,,); send(,,,); recv(,,,)
+
+close()
+shutdown(,)
+
+
+
+///////////////////////keywords used
+AF_INET
+PF_INET
+SOCK_STREAM
+SOCK_DGRAM
+INADDR_ANY

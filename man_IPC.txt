@@ -1,0 +1,43 @@
+C startoff routine passes many things to main()
+int argc
+char* argv
+char* envp
+extern char** environ
+
+_____________________
+process has two context : user context and kernel context
+
+user context :
+stack;
+some space;
+heap;
+uninitialized data;
+initialized r/w data;
+initialized read only data;
+text;
+
+OR
+user context :
+data;
+text;
+
+kernel context :
+it has a part in the process table;
+other portion is used to store the location, size of the user context etc;
+
+
+___________________
+process info
+int getpid();
+int getppid();
+unsigned short getgid();
+
+unsigned short geteuid();	effective uid
+unsigned short getegid();	effective gid
+
+___________________
+file attributes : file type; inode no; device id; no of links; uid; gid; size;;;;;...
+int stat(char* pathname, struct stat* buf);	<sys/types.h><sys/stat.h>	0/-1
+int fstat(int filedes, struct stat* buf);		<sys/types.h><sys/stat.h>	0/-1
+struct stat{}						CP29UNP
+

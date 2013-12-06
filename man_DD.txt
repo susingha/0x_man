@@ -1,0 +1,128 @@
+char devices:
+    can be read as steam of bytes like a file
+    on most char devices u cant move back n forth unlike regular files (there are exceptions)
+    impements open, close, read, write system calls
+
+
+list_head -> pointer to head of linked list.
+hlist_node -> hash list of the linked list.
+
+
+threads:
+http://www.cs.rutgers.edu/~pxk/416/notes/05-threads.html
+
+interrupt handler:
+http://www.itechtalk.com/thread239.html
+it generally wakes up sleeping processes waiting for some event on this device/fd
+it cannot copy data to/from user space because it doesnt execute in the context of a process
+should not sleep (call wait_event, etc)
+should not call schedule
+should not allocate memory with anything other than GFP_ATOMIC. or lock a semaphone.
+in other words, it should be as atomic as possible.
+ISRs has been kept out of process contexts for purely DESIGN DECISIONS. its not fundamentally impossible.
+check: http://stackoverflow.com/questions/1053572/why-kernel-code-thread-executing-in-interrupt-context-cannot-sleep
+       http://comments.gmane.org/gmane.linux.kernel.kernelnewbies/1783
+the void* that you pass during request_irq is passed back to you as call back data when the handler is called. also same interrupt handler can be registered for more than one IRQs. as in tj_8321 driver.
+implemented using top half and bottom half. bottom half implemented using tasklet, workqueue
+struct pt_regs *regs gives you a 'snapahot of the processors context' before entering the handler, which you can debug (how ??)
+
+stupid ways to mutual exclusion: local_irq_save(flags), local_irq_restore(flags). use semaphore locking
+
+Q: can a interrupt handler be preemted ?? only by a higher priority ISR, provided our ISR has not been marked as a fast handler
+
+tasklet:
+never runs parallel to itself. should not also run parallely with the interrupt handler. this should be handled with proper locking between the tasklet and interrupt handler
+
+spin locks are much faster then mutex locks (about a 100 cpu cycles). spin locks used for protection to smaller computations
+apply locks in as much smaller granularity as possible. as in not lock the whole OS for the sake of protecting a variable
+
+
+dentries point to inode. inode also points back to dentry. its a list head. this list will have pointers to only those dentries that have been accessed, or rather those that has been cached and NOT ALL hardlinks files
+
+inodes have a i_private pointer for custom purposes.
+
+
+some kernel programming guidelines
+http://linuxinme.blogspot.com/2007/05/allocating-memory-in-kernel.html
+
+buffer overflow: http://cprogramming.com/tutorial/secure.html
+
+kernel panics are og two types:
+soft panic: oops (same as segfaults in a user program)
+hard panic: Aieee (is nothing but oops while you are in an isr)
+
+if an stackdump occurs its the EIP to look for.
+it says the function name and module name at the time of the oops/aieee
+
+fork and vfork
+fyi: fork is implemented using copy-on-write pages. i.e. the pages are copied to new pages only when the parent/child attempts to modify its own pages. until then the child also uses the parent's pages
+
+
+TODO:
+mode switch and context switch. what exactly happens
+http://stackoverflow.com/questions/2479118/cpu-switches-from-user-mode-to-kernel-mode-what-exactly-does-it-do-how-does-it
+how large is the kernel executable size. is it normally more than what is allocated for the kernel in the RAM.
+how much stack size and heap size is given to a normal user executable in the physical memory and/or virtual memory.
+per process information maintained by the kernel
+tasklets are run in interrupt context and work-queues are run in process context. means ?? how ??
+
+
+virtual memory management in kernel
+http://kerneltrap.org/node/2450
+http://stackoverflow.com/questions/4528568/how-does-the-linux-kernel-manage-less-than-1gb-physical-memory
+http://users.nccs.gov/~fwang2/linux/lk_addressing.txt (or check lk_addressing.txt in this folder)
+
+
+struct task_struct is nothing but the PCB
+
+some terms related to virtual to physical address translation:
+TLB hit, TLB miss
+TLB is implemented as a Content Addresseable Memory
+in case of a TLB miss, we go for a page walk and fill in the TLB.
+if page walk fails, it raises a page fault. and the requested virtual address is loaded to the memory from HD and new page tables are setup (swap out may/maynot happen) and TLB is filled again
+in case of a context switch from process to process, the TLB is flushed.
+in case of a context switch from thread to thread of a process the TLB is NOT flushed. this is not a context switch at all
+read: http://www.linuxjournal.com/article/3814?page=0,1
+
+how is a fork bomb cured in linux kernel:
+the runtime priority is divided between the parent and child on every fork. hence both suffers on a fork.
+other processes keep running smoothly (but only till the priorities are recalculated)
+
+
+copying data between userspace and kernel space.
+make sure that you are not transferring any space specific pointers across space.
+a kernel pointer would not be understood in user space and vice versa <<-- ?? why !
+
+
+How to become a daemon:
+=======================
+dissociate from tty
+become session and process group leader
+go to background by fork off and die
+change current directory to /
+change umask
+close all open fds inherited from parent. including 0, 1, 2. open fds later as needed
+use a log file for outputs/error
+
+how ptrace works:
+http://www.linuxjournal.com/article/6100
+
+
+Not so FAQs:
+how to notify / walkeup a user process by a kernel module. locks, <check what is used to implement a lower half> ?
+what was the call used to send a packet from a below layer to the above layer
+why we should not read write files from kernel / module:
+http://www.linuxjournal.com/article/8110
+
+Compiling kernel for:
+arm:
+get the toolchain from codesourcery 
+and place it anywhere /home/supratik/checkout/arm-2013.05/bin/arm-none-linux-gnueabi-
+get the kernel code, unpack
+in Makefile,
+ARCH = arm
+CROSS_COMPILE = /usr/local/bin/arm-linux- (the place of the toolchain)
+KBUILD_CFLAGS += -march=armv5te (check gcc man for this)
+make menuconfig ARCH=arm
+make
+make modules

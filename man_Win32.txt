@@ -1,0 +1,11 @@
+___________________________________4 steps to window
+
+create an instance of the class WINDCLASSEX
+define that class (provide a 'classname' as string)
+
+register the class instance (a function)(provide the WINDCLASSEX instance)(get a handle to the window)
+
+create the window (a function)(provide the 'classname)(get a window handle)
+
+show the window(a function)(provide the window handle)
+update the window(a function)(provide the window handle)

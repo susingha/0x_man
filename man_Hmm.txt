@@ -1,0 +1,9 @@
+# have a global search portal. this should search:
+	bugs, TAC cases
+	technical mail conversations (emailin)
+# have a daily build server which shall keep source codes and builds ready to be downloaded any time, impromptu
+# somethime like test platform debugger
+# something to be able to insert code. this is tricky. need depe linux and linker funda
+# logging mechanish. both local and remote
+
+

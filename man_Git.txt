@@ -1,0 +1,18 @@
+
+
+git diff HEAD # diffs for added files and folders as well
+
+# ?? diffs between repo and committed code
+
+# ?? diffs between committed and local uncommitted changes
+
+# ?? checkout a part of the whole repository only
+
+# ?? checkin a few files only
+
+
+
+
+
+
+
