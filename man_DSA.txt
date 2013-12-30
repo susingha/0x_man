@@ -59,6 +59,30 @@ huge discussion:
 
 
 
+hex(input as string) to decimal.
+say input is 0xABAB.
+have a 256 byte array. array index 55 ['7'] would contain 7
+                       array index 56 ['8'] would contain 8
+                       array index 57 ['9'] would contain 9  ...
+                       array index 65 ['A'] would contain 10
+                       array index 66 ['B'] would contain 11
+                       array index 67 ['C'] would contain 12
+                       array index 68 ['D'] would contain 13
+                       array index 69 ['E'] would contain 14 ...
+                       array index 97 ['a'] would contain 10
+                       array index 98 ['b'] would contain 11
+                       array index 99 ['c'] would contain 12 ...
+go through the string. for every byte, lookup the array for the corresponding value.
+shift left the previous value 4 bits and OR the new value. finally we get the decimal value
+Only 16 + 6 places would have useful values all other indices would be wasted.
+
+
+Multiplying polynomials:
+	use a 2D matrix. put polynomial co-efficients on each axis. multiply and put the values in the
+	different cells of the matrix. add the cell values diagonally from SW to NE. each SW to NE path would
+	have coefficients for a perticular power of x
+
+
 links:
 http://jonisalonen.com/2013/sorting-a-linked-list/
 http://stackoverflow.com/questions/1525117/whats-the-fastest-algorithm-for-sorting-a-linked-list
