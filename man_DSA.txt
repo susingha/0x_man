@@ -1,0 +1,97 @@
+
+
+Finding kth largest
+    keep record of the number of children a node has (in addition to the left pointer and the right pointer).
+    now we have been asked to find the 50th largest. we are at a node and we see that my right child has 15 children.
+    all 15 children and this node are more than me. so lets traverse to the left node and look for the 35th largest node
+
+
+Sorting a Linked List: A good discussion
+    merge would be most efective. its inplace. O(nlogn).
+    caveat: breaking the list into two roughly equal parts may not be feasible in case the list is
+    arbitrarily large. traversing whole list would invite n potential cache misses
+    somewhat awesome solution: sort first 2 elements. sort next two elements.
+                               sort the first two and next two using merge sort. 4 elements got sorted.
+			       sort similarly the next 4 and merge the first 4 and next 4 elements. get 8 sorted elements
+			       ... (implement this).
+			       O(nlogn) comparisons. stack would use O(logn) space due to recursion
+    how is cache misses reduced. we are anyway doing nlogn traveral ultimately.
+    check: http://jonisalonen.com/2013/sorting-a-linked-list/
+
+    A linked list can have memory allocation anywhere in the virtual address space..
+    iterating through an LL can be very expensive in paging / caching.
+    sorting a linked list is not a good idea. be it merge sort or bubble or counting sort.
+    probably in a huge dataset, copying the whole set into an array, purge the LL (space saved)
+    then sort the array (better memory localization)
+    practically this turns out to be faster on normal PCs much due to ..
+    localization on a million elements with high fragmentation
+    check: http://stackoverflow.com/questions/1525117/whats-the-fastest-algorithm-for-sorting-a-linked-list
+    packed list and fragmented list ??
+
+    Or just copy the linked list into a new list. rather recreate the linked list into a new
+    Data Structure like a BST (simplest case, or another list) and keep on sorting tree as each element is inserted.
+    simultaneously keep freeing the corresponding element from the older list
+
+    inplace, O(n) ?? really
+
+
+BST insertion complexity is O(n^2)   in case of a  badly balanced tree where the tree turns into a linked list
+                            O(nlogn) in case of a fairly balanced tree
+
+
+Searching a smaller string into a bigger string.
+    Use iteration to go throug the first characters in the bigger string. and once found a match use recursion to
+    determine if the subsequent characters match. Should work efficiently in cases where we are searching
+    ssshit in holysssssshittt.
+
+
+Tree traversals. Find maximum depth of a tree. Do any of the depth first searches.
+    In tree traversal inorder postorder and preorders all are different kinds of depth first searches.
+    in postorder the observation is that a traversal while returning always returns to its parent.
+    Hence if we are asked to traverse a tree without recursion, we may have to implement a stack by ourself, then
+    postorder should be a good way to speed up returning calls
+    (better and serialized nodes locality while poping from stack)
+
+
+Counting set bits in a number:
+huge discussion:
+    http://stackoverflow.com/questions/109023/how-to-count-the-number-of-set-bits-in-a-32-bit-integer
+
+
+
+links:
+http://jonisalonen.com/2013/sorting-a-linked-list/
+http://stackoverflow.com/questions/1525117/whats-the-fastest-algorithm-for-sorting-a-linked-list
+http://stackoverflow.com/questions/109023/how-to-count-the-number-of-set-bits-in-a-32-bit-integer
+
+
+
+Stuff to learn:
+===============
+Counting sort: ??
+Radix sort:
+natural sort:
+Merge sort: get the algo better
+Skip Lists: learn again
+heaps: min heaps, max heaps
+a good DFS and BFS implementation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

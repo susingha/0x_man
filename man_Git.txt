@@ -10,6 +10,8 @@ git diff HEAD # diffs for added files and folders as well
 
 # ?? checkin a few files only
 
+git mv previous_name new_name
+
 
 
 
