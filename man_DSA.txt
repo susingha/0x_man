@@ -1,4 +1,4 @@
-
+Scoops:
 
 Finding kth largest
     keep record of the number of children a node has (in addition to the left pointer and the right pointer).
