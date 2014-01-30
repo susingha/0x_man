@@ -34,6 +34,8 @@ Sorting a Linked List: A good discussion
 
     inplace, O(n) ?? really
 
+Unrolled Linked List: stores multple elements in a node for somewhat better locality of memory.
+
 
 BST insertion complexity is O(n^2)   in case of a  badly balanced tree where the tree turns into a linked list
                             O(nlogn) in case of a fairly balanced tree
@@ -83,11 +85,69 @@ Multiplying polynomials:
 	have coefficients for a perticular power of x
 
 
+
+In place merge sorting a two phase sorted array with the following pattern:
+A1A2A3A4A5...B1B2B3B4B5...
+	this is pretty simple because given an element we can calculate the initial and final position
+	of the element. hence just pick an element and move it to its final position. If the final position
+	is already occupied move that element again. If the final position is not already occupied,
+	pick the next element and continue with this algorithm. In the end all elements should have moved
+	to their final position. I think this should not get into any infinite loops or undefined state since
+	the posiitons of the elements are fully deterministic just by their values. The algo fails if we are
+	dealing with numbers though in that case looking at a number we cannot decide its final position.
+	That boils down to a inplace merge sort algorithm which still doesnt have a stable solution.
+	But if we can somehow predict the final position of an element (say after an initial swipe) that should
+	be a solvable problem.
+	Also the  problem gets really simple if we are allowed to use n extra space for an array of 2n (A1 to Bn)
+	Any other approach for both the above scenarios ??
+
+
+
+
+
+
+Amortized Complexity:
+Amortized complexity is more realistic than worst case asymptotic analysis. AMortized complexity is
+mostly less (if not equal) than worst case asymptotic complexities
+scripting languages (for instance) are often happy to grow arrays and hash tables by some factor
+even though that is an expensive operation. The growing can a O(n) operation, but amortized is O(1) because you do it rarely.
+
+an unofficial explaination form stackoverflow:
+	For example searching an unsorted array of n items for a single match may take up to n comparisons and
+	hence is o(n) complexity. However, if we know the same array is going to be searched for m items,
+	repeating the total task would then have complexity O(m*n). However, if we sort the array in advance,
+	the cost is O(n log(n)), and successive searches take only O(log(n)) for a sorted array. Thus
+	the total amortised cost for m elements taking this approach is O(n*log(n) + m*log(n)).
+	If m >= n, this equates to O(n log(n)) by pre-sorting compared to O(n^2) for not sorting. Thus
+	the amortised cost is cheaper. In a way we see that for a large data set, the number of sheap operations
+	are so large that we can kind of ignore the occasional heavy operations to find the cost which is the amortized cost
+	http://stackoverflow.com/questions/11102585/what-is-amortized-analysis-of-algorithms
+
+It gets very essential to consider amortized costs when analuzing dynamic arrays and other such data structures where an
+expensive operation is done occasionally in case of a large dataset
+
+more: ??
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 links:
 http://jonisalonen.com/2013/sorting-a-linked-list/
 http://stackoverflow.com/questions/1525117/whats-the-fastest-algorithm-for-sorting-a-linked-list
 http://stackoverflow.com/questions/109023/how-to-count-the-number-of-set-bits-in-a-32-bit-integer
-
+http://stackoverflow.com/questions/11102585/what-is-amortized-analysis-of-algorithms
 
 
 Stuff to learn:
@@ -99,7 +159,7 @@ Merge sort: get the algo better
 Skip Lists: learn again
 heaps: min heaps, max heaps
 a good DFS and BFS implementation
-
+splay trees
 
 
 
