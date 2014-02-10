@@ -1,5 +1,18 @@
 Scoops:
 
+
+Finding smallest primes in a large range of numbers: http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes:
+    take a number and keep marking all its multiples. As we go forward, what ever is found unmarked, is a prime
+
+Quad Tree:
+    When you have to maintain a square which can be devided into subsquares recursively but not homogeneusly
+    http://en.wikipedia.org/wiki/Quadtree
+
+Dictionary: its a concept of key-value pair. not a data structure. can be implemented using any appropriate data structure
+    http://stackoverflow.com/questions/10017808/best-data-structure-for-dictionary-implementation
+    a good read on the large answer
+    introduces: succinct trees (low memory dictionary implementation) http://stevehanov.ca/blog/index.php?id=120
+
 Finding kth largest
     keep record of the number of children a node has (in addition to the left pointer and the right pointer).
     now we have been asked to find the 50th largest. we are at a node and we see that my right child has 15 children.
@@ -32,9 +45,28 @@ Sorting a Linked List: A good discussion
     Data Structure like a BST (simplest case, or another list) and keep on sorting tree as each element is inserted.
     simultaneously keep freeing the corresponding element from the older list
 
+    Radix + Counting sort:
+    a reasonably good way of sorting integers:
+    combination of Radix sort and counting sort.
+    sort each decimal place of a radix sort using counting sort
+    Primer: Radix sort: sort last decimal place first, then the 10th place digit and go on
+            Counting sort: arrange all numbers into an ascending hashtag and after hashing each entry, sorted
+
+    heaps: min heaps, max heaps
+    heapify: O(log n)
+    create / build heap: O(n)
+    heap sort: O(nlog n)
+
     inplace, O(n) ?? really
 
+
 Unrolled Linked List: stores multple elements in a node for somewhat better locality of memory.
+
+tuning performance on external sorts:
+    parallel processing
+    parallel reads writes to hard disk
+    increasing hardware speed, more ram, solid state drives
+    increasing software speed, optiming by using different types of sorting on different passes
 
 
 BST insertion complexity is O(n^2)   in case of a  badly balanced tree where the tree turns into a linked list
@@ -53,6 +85,13 @@ Tree traversals. Find maximum depth of a tree. Do any of the depth first searche
     Hence if we are asked to traverse a tree without recursion, we may have to implement a stack by ourself, then
     postorder should be a good way to speed up returning calls
     (better and serialized nodes locality while poping from stack)
+
+Red Black Trees and AVL Trees:
+    red black trees and avl trees both are balanced but red black trees allows for
+    fast insertion and deletion with guarantee, hence useful for time sensitive applications like
+    completely fair schedulers. 
+    AVL trees allows for faster retrieval without guarantee, it's a more rigidly balanced tree,
+    hence used when the data structure is created once like a dictionary.
 
 
 Counting set bits in a number:
@@ -148,18 +187,21 @@ http://jonisalonen.com/2013/sorting-a-linked-list/
 http://stackoverflow.com/questions/1525117/whats-the-fastest-algorithm-for-sorting-a-linked-list
 http://stackoverflow.com/questions/109023/how-to-count-the-number-of-set-bits-in-a-32-bit-integer
 http://stackoverflow.com/questions/11102585/what-is-amortized-analysis-of-algorithms
-
+http://people.csail.mit.edu/bdean/6.046/dp/
+http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
+http://en.wikipedia.org/wiki/Quadtree
+http://stackoverflow.com/questions/10017808/best-data-structure-for-dictionary-implementation
+http://stevehanov.ca/blog/index.php?id=120
 
 Stuff to learn:
 ===============
-Counting sort: ??
-Radix sort:
 natural sort:
 Merge sort: get the algo better
 Skip Lists: learn again
-heaps: min heaps, max heaps
 a good DFS and BFS implementation
 splay trees
+
+DP: http://people.csail.mit.edu/bdean/6.046/dp/
 
 
 

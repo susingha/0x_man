@@ -94,6 +94,14 @@ make sure that you are not transferring any space specific pointers across space
 a kernel pointer would not be understood in user space and vice versa <<-- ?? why !
 
 
+Reading files from kernel space is not encouraged and is a bad practice.
+	read from /proc ? No procs file systems are clamped down by kernel developers cuz
+	they began to be abused by programmers to store almost any type of data. procs are 
+	more encouraged to contain mostly process related data.
+	passing data by ioctls ? converting data passed by 32 bit programs to a 64 bit running kernel are dangerous.
+	configuration files: use sysfs. how to create a sysfs ?? http://www.linuxjournal.com/article/8110
+
+
 How to become a daemon:
 =======================
 dissociate from tty
