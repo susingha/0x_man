@@ -72,6 +72,7 @@ http://kerneltrap.org/node/2450
 http://stackoverflow.com/questions/4528568/how-does-the-linux-kernel-manage-less-than-1gb-physical-memory
 http://users.nccs.gov/~fwang2/linux/lk_addressing.txt (or check lk_addressing.txt in this folder)
 
+TLB, process tags, page tables
 
 struct task_struct is nothing but the PCB
 
