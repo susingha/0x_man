@@ -1,9 +1,9 @@
-////////////////////////////headers files used
+//////////////////////////// headers files used
 winsock.h					for windows
 $ cc -o server server.c -lnsl -lsocket -lresolv	for solaris
 
 
-////////////////////////////structures used
+//////////////////////////// structures used
 struct sockaddr_in
 {
 	short int		sin_family;
@@ -18,7 +18,7 @@ struct in_addr
 }
 
 
-////////////////////////functions commonly used
+//////////////////////// functions commonly used
 i = htons(8000)
 i = ntohs(8000)
 i = htonl(8000)

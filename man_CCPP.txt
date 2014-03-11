@@ -557,6 +557,11 @@ out:
 	}
 
 
+why NULL pointer cannot be accessed. 0 should be a valid virtual memory address !!
+first page in a process is never mapped. design decision
+(so that dereferencing a NULL pointer fails cleanly rather than unintendedly accessing actual memory)
+
+
 #endif
 
 more junk cautions to keep in mind:
@@ -697,7 +702,7 @@ declared towards the end of the function. i.e in c we need to give all
 declarations at the start of a function, which is not compulsory in C++ but in
 some cases it crashes. why?
 
-how to get and examine a core dump
+how to get and examine a core dump ??
 
 what is a BFD ? (http://sources.redhat.com/binutils/docs-2.10/ld_toc.html#SEC_Contents)
 
