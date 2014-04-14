@@ -88,6 +88,7 @@ Reading files from kernel space is not encouraged and is a bad practice.
 
 some kernel programming guidelines
 http://linuxinme.blogspot.com/2007/05/allocating-memory-in-kernel.html
+http://www.careercup.com/question?id=15037854 <-- why do we need copy_from_user / copy_to_user
 
 buffer overflow: http://cprogramming.com/tutorial/secure.html
 
@@ -107,6 +108,14 @@ until then the child also uses the parent's pages
 TODO:
 mode switch and context switch. what exactly happens
 http://stackoverflow.com/questions/2479118/cpu-switches-from-user-mode-to-kernel-mode-what-exactly-does-it-do-how-does-it
+http://www.cs.columbia.edu/~junfeng/11sp-w4118/lectures/trap.pdf
+important steps:
+- transition must be done in secure way
+- initiated by trap interrupt.
+- save process state so it can be resumed later. stack, processor registers
+- start executing the interrupt (trap) handler
+
+
 how large is the kernel executable size. is it normally more than what is allocated for the kernel in the RAM.
 how much stack size and heap size is given to a normal user executable in the physical memory and/or virtual memory.
 per process information maintained by the kernel: only task_struct
