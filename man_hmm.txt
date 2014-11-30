@@ -1,9 +1,40 @@
+Technical Skills:
 # have a global search portal. this should search:
 	bugs, TAC cases
-	technical mail conversations (emailin)
+	technical mail conversations (cc to emailin@cisco.com updates the wiki automatically)
 # have a daily build server which shall keep source codes and builds ready to be downloaded any time, impromptu
-# somethime like test platform debugger
-# something to be able to insert code. this is tricky. need depe linux and linker funda
+# unitests: each function should have a meaning and purpose.
+  There should be a UT to test that purpose with good code coverage of the function.
+  UT should be a part of build systems or atleast pre checkin requirement.
+# somethime like test platform debugger to call certain functions out of the blue on a running system.
+  this could be used to change globals and other system wide variables.
+# something to be able to insert code. this is tricky. need deep linux and linker funda
 # logging mechanish. both local and remote
+# Pre checkin code analyzer or guidelines in code reviews:
+	As many lines of comments as the function itself or more. Conforms with the UT of that function.
+	Promote inline comments with //
+	Not too large functions
+	use spaces intead of tabs (.vimrc)
+# Any rule (code guideline or commit requirements) can be overrides but should be able to be tracked.
+
+Managerial Skills:
+# Managers are not superior to devleopers and are paid the same.
+# Managers sit in cubes. Technical leads sit in cabins
+# Managers / Directors / CEOs dont send emails to developers if first person (NEVER)
+  Managers can instruct a developer (new joiners) to send an emai about guidelines or any other business information.
+  The general vibe should be that developers run the company. Not managers.
+# Open work space. Cubes are self setup. PCs are self installed. True Startup culture.
+# Tech leads must understand business. Tech leads teach business to developers.
+  Conversations like: If we dont complete this by this time, we lose that customer and we lose that amount of money.
+# Discourage jargons: Ground level talks and no jargons.
+
+Logistics:
+# Phone > Chat > Email. Generally a more live mode of conversation gets more priority
+# Open work space. Cubes are self setup. PCs are self installed. True Startup culture.
+# Free food (breakfast, lunch, snacks and dinner)
+# Incentives / Recognitions to use of public transport instead of car / bike.
+# WFH, VPN, Laptops, Monitors, Equipments unlimited. You can bring your own device. Any device.
+  You can take home devices if you want but with records. No permission needed.
+
 
 
