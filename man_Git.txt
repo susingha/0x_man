@@ -1,19 +1,27 @@
 
+git config
+    git config --global user.name "supratik"
+    git config --global user.email supratik.dnit@gmail.com
+    git config --global core.editor vim
+    git config --global commit.template ~/.gitmessage.txt
+    git config --list  # gives you a list of Git configurations
 
-git diff HEAD # diffs for added files and folders as well
+Ref: http://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration
 
-# ?? diffs between repo and committed code
 
-# ?? diffs between committed and local uncommitted changes
-
-# ?? checkout a part of the whole repository only
-
-# ?? checkin a few files only
+git diff
+    git diff HEAD # diffs for added files and folders as well
+    # ?? diffs between repo and committed code
+    # ?? diffs between committed and local uncommitted changes
+    # ?? checkout a part of the whole repository only
+    # ?? checkin a few files only
 
 git mv previous_name new_name
 
 
-
+links:
+https://github.com/issues
+http://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration
 
 
 
