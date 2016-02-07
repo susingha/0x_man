@@ -211,12 +211,78 @@ DP: http://people.csail.mit.edu/bdean/6.046/dp/
 
 
 
+Before the Interview:
+=====================
+dictionary of DSA
+http://xlinux.nist.gov/dads/
+
+infix postfix prefix algos
+program to transpose and multiply a matrix
+implement merge sort using recursion. needs temp array nlogn
+insert and print and search in a binary tree
+
+reverse a linked list
 
 
+techniques to remmber:
+two pointers n places apart move them simultaneously
+inorder on a BST will always be in sorted order
+bubble sort: u may stop the sort if you find there were no exchanges in an iteration
+split a numbers in powers of 2. like 10 = 8 + 2. makes for easier calculations
+largest sum of consecutive integers. mug the algo. find the logic
+
+XOR is associative and commutative
+XOR with itself is 0
+XOR with 0 is itself
+
+sum of AP: n/2(2a + (n-1)d)
+
+try to use a tree in the form of a decision tree
+
+in a loop check if a required variable can be generated from its previous version in the previous interation
+
+if the usual way is not working, consider reversing the order or something. (like the mergesort an array into a bigger array example)
 
 
+prime nos are always 6N-1 and/or 6N+1 (converse is not true)
 
+if a no is not-prime (it is divisible) it has to be divisible by something less than sqrt(number). i.e its is enough to check number%i from 2 to sqrt(number). not 2 to number-1
 
+if you have 5 numbers and have to find the min of them, make a min heap and get the root node. sorting would be a larger process
+used when we have more than two arrays to sort into a single array.
+another way to pick two arrays at a time and sort into single array
+
+if you have numbers like 1, 2, 4, 8, 16, 32 ... every subset gives a different sum. hence given the sum you can find out which elements were present to give that sum
+
+1000 bottles of the king
+counting occurances of bit numbers for every number in an array
+finding most common element which appears more than half the array
+suspicionStrength
+
+recursive inorder: http://tech-queries.blogspot.com/2010/12/iterative-in-order-traversal-of-binary.html
+
+lowest common ancestor in Binary tree: http://goursaha.freeoda.com/DataStructure/LowestCommonAncestor.html
+
+some more Qs: http://exploreneedy.com/Questions/
+
+strtok() keeps returning you tokens on consecutive calls
+
+reversing the order of words in a scentece
+
+remember: if its an array, use(exploit) the end index as well
+
+the sorted row and sorted colomn matrix solution. try to convert a series into a series where one side is more and one side is less, instead of both side large or both side small. in this case start traversing from bottom-left or top-right instead of top-left or bottom-right
+
+in recursion we often end up doing the same calculation may times.
+think of a way to keep saving intermediate solutions as and when we solve a subproblem
+for example if an intermediate solution involves finding factorial of a number, save the factorial in an array
+and next time you encounter finding a factorial first consult the array before attempting to finding the factorial
+aka: memoization
+source: http://www.codechef.com/wiki/tutorial-dynamic-programming
+
+why radix tree is most useful for routing table lookups
+
+http://eternallyconfuzzled.com/jsw_home.aspx
 
 
 
