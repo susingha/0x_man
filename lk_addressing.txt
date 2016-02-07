@@ -1,0 +1,235 @@
+A Clarification on Linux Addressing
+====================================
+
+_fwang2@ornl.gov_
+
+
+OK, here is my understanding so far (meaning that it is self-contained, no
+hole being punched yet, but that could change  ... ).
+
+On x86 32-bit architecture, maximum addressable memory is 4GB.  This
+addressable space is known as "virtual address space" and those addresses are
+called "virtual addresses". Now to access physical memory, or more
+specifically, to access a physical address, a virtual address must go through
+the segmentation then paging system, known as the "mapping" process. 
+
+                         MMU
+     virtual/   +----------------------+
+        logical |  +----------------+  | logical is Intel terms
+        ------->|  | Segmented Unit |  |
+                |  +----------------+  |
+                |          | linear    | 
+                |  +----------------+  |
+                |  | Paging Unit    |  |
+                |  +----------------+  |
+                |          |           |
+                +----------|-----------+
+                           | physical
+                           |
+                           v
+
+
+In order to access *any* physical pages, that page *must* be in the process's
+page table - every process has its own page table. That is the base.
+
+Now, there are two "less obvious" details worth pointing out: first, even it
+is often said a process is "given" a unique 4GB virtual address space, it
+doesn't really mean that the process can do whatever it wants in that space:
+to access a paricular area inside that virtual space, it must ask kernel for a
+so-called "valid" memory area for it - the corresponding data structure
+defined in Linux is known as "vm_area_struct" or VMAs. You can check all VMAs
+associated with a process through "pmap" command on a process id.
+
+A second point is that even in theory, a process got the "potential" of
+accessing 4GB space, but say a user-space application makes use of libc, then
+libc should be mapped to the virtual space; the user-space application may
+also make use of syscalls, that means kernel will work on behalf of this
+process, so kernel image should also be mapped to process's virtual address
+space: and this mapping is better be permanent, given how often a process
+needs to switch to kernel mode. A temporary mapping scheme seems possible, but
+doesn't make much sense.
+
+To summarize, a 4GB virtual address space for a process needs to be split
+between kernel and user space program: therefore the well-known 3G/1G split.
+User space takes the 0-3GB, and kernel takes the 3GB-4GB.
+
+Thus, in the 3G/1G split, kernel has the virtual address space of 1GB.
+Remember that to access a physical address, you need a virtual address to
+start with, even for kernel. So if you don't do anything special, the 1GB
+virtual address effectively limits the physical space a kernel can access to
+1GB. Okay, maybe this is a third less obvious detail: kernel _needs_ to access
+*every* physical memory to make full use of it.
+
+In the early days, where a machine's physical space is much less than 1GB, it
+is OK, the whole physical memory is mapped to this 1GB virtual address.
+
+       process address space 
+
+    4GB +---------------+
+        |     512MB     |
+        +---------------+ <------+     physical memory               
+        |     512MB     |        | 
+    3GB +---------------+ <--+   +---> +------------+ 
+        |               |    |         |   512 MB   |
+        |     /////     |    +-------> +------------+
+        |               |     
+    0GB +---------------+     
+
+  Example: Physical address {x} is mapped in kernel address space, virtual
+  address is {PAGE_OFFSET + x}, where PAGE_OFFSET is defined as 3GB in Linux
+  kernel for the 3/1 split.
+
+  Two general observations related to this:
+
+  - When all physical memory can be directly mapped into virtual address
+    space, those corresponding virtual addresses are also called "kernel
+    logical address". These logical address can often be mapped to physical
+    address through constant offset, 3GB for example.
+
+  - The part of physical memory can be mapped into virtual space is also known
+    as "Low Memory", conversely, those can't be mapped (say the portion over
+    1GB) is known as High Memory. In above case, all 512MB is Low Memory.
+
+
+Now you say, most machines got 2GB or more physical memory now. What happens
+then? when you want to access physical memory above 1GB (or more precisely,
+896MB), Linux kernel use 128 MB virtual address space to *temporarily* map
+those virtual addresses to the physical address, thus to achieve the goal of
+being able to access all physical pages. There are some details not clearly
+spelled out here, for example, will be keep that 128 MB pre-allocated for this
+temporary mapping etc. But I think at this point, we can safely skip those
+over, and focus on the essential issue here: use temporal mapping to access
+all physical memory. The following figure roughly illustrate the scheme:
+
+
+                                           physical mem
+       process address space    +------> +------------+
+                                |        |  3200 M    |
+                                |        |            |
+    4GB +---------------+ <-----+        |  HIGH MEM  |
+        |     128 MB    |                |            |
+        +---------------+ <---------+    |            |
+        +---------------+ <------+  |    |            | 
+        |     896 MB    |        |  +--> +------------+         
+    3GB +---------------+ <--+   +-----> +------------+ 
+        |               |    |           |   896 MB   |
+        |     /////     |    +---------> +------------+
+        |               |     
+    0GB +---------------+     
+
+
+Putting this in Linux context: kmalloc() will return you a chunk of virtual
+memory: yes, pointed by a virtual address, but more importantly, that is also
+a kernel logical address, meaning it has direct mapping to *continuous"
+physical pages.
+
+vmalloc() is another kernel call that will return you a chunk of virtual
+memory. However, this virtual memory is only continous on virtual space, it
+may not be continous on physical space. Also, the actual mapped physical pages
+can not only come from Low Memory, but also can come from High Memory,
+especially when you are asking for a large chunk of it.
+
+
+On 64-bit architecture
+----------------------------------------------
+
+On such architecture, the 3G/1G split doesn't apply anymore. Due to the huge
+address space, you can easily pick a split scheme between user space and
+kernel space, and still easily map the whole physical memory into kernel
+address space.
+
+
+C pointer address question
+----------------------------------------------
+
+A sorta interesting observation on C pointers: we can print a pointer address
+in C. For a user-space application, if you print out the pointer address you
+defined, it should be one of the virtual addresses out of the (0-3GB) range.
+
+What about kernel? what if print a pointer address in kernel? is it always
+from kernel address space? The answer is no ... since kernel *can* access user
+space address, depending on the pointer, it can be from either.
+
+How do you tell if it is from kernel or user space? Yes, if it fall into
+0-3GB, then it is from user-space, otherwise, it is from kernel. The take-away
+message here, either way, it is virtual address you are seeing.
+
+Does it make sense?
+
+
+
+
+In real world #1
+----------------------------------------------
+
+  $ cat /proc/iomem
+
+  00100000-003205e3 : Kernel code
+  003205e4-0041bdc3 : Kernel data
+  0047d000-004f3aff : Kernel bss
+
+
+  So the address shown here is physical, kernel code start out at 1G, and code
+  portion of it is a bit over 2 MB.
+
+  PAGE_OFFSET =  0xC8000000 = 3GB
+
+  For a 512MB system, the virtual address for kernel will be from
+  3GB ~ PAGE_OFFSET + 512MB
+
+In real world #2
+----------------------------------------------
+
+From a user process point of view
+
+    +----------------------+ <--- 0xBFFF FFFF (=3GB)
+    | environment variable |
+    |----------------------| <--- 0xBFFF FD0C 
+    | stacks (down grow)   |
+    |          |           |
+    |          v           |
+    |----------------------|
+    |                      |
+    |     // free memory   |
+    |                      |
+    |                      |
+    |----------------------| <--------------------
+    |  myprogram.o         |                    |
+    |----------------------|                    |
+    |  mylib.o             |                    |
+    |----------------------|              executable image      
+    |  myutil.o            |                    |     
+    |----------------------|                    |
+    |  library code (libc) |                    |
+    |----------------------| <--------------------                
+    |                      | 0x8000 0000 (=2GB) 
+    |                      |
+    |  other memory        |
+    |                      |
+    +----------------------+
+
+References:
+----------------------------------------------
+- address spaces in kernel discussion
+  http://mail.nl.linux.org/kernelnewbies/2005-09/index.html#00005
+  http://mail.nl.linux.org/kernelnewbies/2005-09/msg00044.html
+  http://mail.nl.linux.org/kernelnewbies/2005-09/msg00072.html
+
+- Memory Address
+  http://en.wikipedia.org/wiki/Memory_address
+
+- Explore the Linux Memory Model
+  http://www.ibm.com/developerworks/linux/library/l-memmod/
+
+- Linux Kernel Development, Robert Love
+
+- Understanding Linux Kernel (ULK3)
+
+- Understanding Virtual Memory (more about tuning than anything else)
+  http://www.redhat.com/magazine/001nov04/features/vm/
+
+
+- - -
+$LastChangedDate: 2008-11-21 16:53:54 -0500 (Fri, 21 Nov 2008) $
+
+

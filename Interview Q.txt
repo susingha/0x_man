@@ -1,0 +1,174 @@
+http://www.bestcode.com/html/interview_questions.html
+
+So you want to know what they are going to ask? Or maybe you are looking for questions to ask?
+
+Here are some programming questions or puzzles often asked in programming interviews. There are usually more than one answer to these questions. Some of them are open ended questions to test how you think and communicate a technical point.
+
+Popular topics are:
+
+1. Algorithms
+
+2. Strings
+
+3. Arrays
+
+4. Other data structures are Linked List, Tree, Stack, Que.
+
+5. Object Oriented Programming
+
+6. Multi Threading
+
+7. SQL and Databases
+
+8. Miscellaneous Programming Topics
+
+9. Puzzles
+
+10. Soft Questions
+
+The easy way to get a job 
+Algorithms Interview Questions
+
+    Can you discuss the characteristics of different sort algorithms such as bubble sort, heap sort, merge sort, quick sort, hash sort? When would you prefer one of them over the other?
+    What does it mean for a sort algorithm to be stable?
+    What kind of search algorithms are available to search sorted data?
+    How does a hashtable work?
+    Which one do you think will perform faster?
+        Sorting 1 million Strings using Collections API in Java, or C++ using STL?
+        A binary search over 1 million Strings in Java? Or a binary search of 1 million strings in C++? (STL)
+        A lookup of a String key in a Java HashMap, or a lookup of a string key in an STL HashMap? Does STL have a HashMap implementation in the first place? What Map implementations are available in STL? (We are not just talking Visual C++)
+        To tackle above problems (storing, sorting 1 million strings), what kind of classes (or frameworks) would you use in Java and in C++? What are their cons and pros? How does Java and it’s libraries compare with C++ with regard to these frameworks?
+    There is a tree structure. The leaf nodes of the tree contain letters like A, B...Z.
+        Write code to print the letters that the leaf nodes contain, from left to right.
+        Write code to compare two trees to see if their leaf nodes contain the same letters in the same order or not.
+            A. You can put everything in a StringBuilder and compare two strings at the end.
+            B. If the trees are big and you want to end comparison as soon as there is a difference found, you can start two threads, each traversing 1 tree, and instead of writing to a StringBuilder, they will be writing to a Pipe. Their parent thread will read from this pipe and will stop the threads as soon as a difference is found.
+    Given a tree where each node contains a letter like A...Z, print each letter in breadth-first order. What data structure would you use to do this? (Hint: It’s a queue)
+    There are 8 bins, each with capacity C. We have a constant stream of goodies each with different size that we need to place into these bins. We start filling the bins from left to right. Whenever an input fits in a bin, we put it there, we do not look any further.
+        A. What is the complexity of our algorithm? O(n)? O(n*n) ? or O(nlogn)?
+            Answer: O(n*n)
+        B. How can we make it faster without changing the final outcome (without changing the content of the bins)? and when we do that what would the complexity be?
+            Hint: O(nlogn) is possible.
+
+Speed up your job search. E-mail your resume to thousands of employers:
+
+EmailMyResume.com Jobseeker Banner 
+C Style Strings:
+
+    Find a substring inside a string.
+    Find a 4 byte substring inside a string. (Instead of comparing bytes or characters, can you now compare as 32 bit integers? What would you do to make your function to be portable across 16,32, 64 bit architectures?)
+    Find and replace a substring inside a string with another string.
+        Using secondary storage.
+        Not using any other storage, assuming existing char* has space to hold the final string. (Or it does not and you need to guard for that.)
+        What happens when string to find is shorter than string to replace with. What happens if it is longer.
+    Reverse the contents of the string.
+        Using extra storage.
+        Without using extra storage (in place).
+    Reverse the words of the string.
+        Using extra storage.
+        Not using extra storage.
+    How do you go about solving above problems in Java? What are the differences in handling strings in C, C++ and Java. What options are available? What are the cons and pros?
+
+Arrays
+
+    How do you declare and allocate 2-D and 3-D arrays in C? What are possible options?
+    How do you declare and allocate 2-D and 3-D arrays in Java? (Or, is there such thing as 2-D, 3-D arrays in Java in the first place?) What are possible options?
+
+Data Structures Interview Questions
+
+    What is Linked List (single, double), tree, que, stack, map, hashtable? In Java, if you want to map string keys to string values, which implementation classes are well known to fit this purpose? What would you use, if you wanted to access the keys in sorted order?
+    How do you detect that a linked list is circular?
+    How do you traverse a tree in depth first order?
+    There is the following tree: Root is 1, under it, left node is 2, right node is 3. Under 2, there is 4 and 5. Under 3, there is 6 and 7. What is the algorithm to be able to print them in the order 1,2,3,4,5,6,7 ?
+
+Object Oriented Programming Interview Questions
+
+    What is Inheritance, Encapsulation, Polymorphism? Give examples to illustrate how they are useful. In C++ and/or Java what language syntax and constructs help implement these concepts?
+        What is a constructor? What is a destructor in C++?
+        Does Java have a destructor?
+        Why do we declare destructors to be virtual in C++?
+        What are private, protected, public modifiers for class members? In Java, what is the default? (no modifiers specified? What is the impact?)
+        What is “final” used for as in final class MyClass in Java?
+        Why does C# have a overrides keyword to override virtual functions where as Java does not have it?
+    Why is the java.lang.String final?
+    When would you override equals() method?
+    When would you override hashCode() method? What else would you do if you override hashCode()?
+    What are auto pointers? What are smart pointers? Have you seen them in action? Where are they used?
+    Is Windows API object oriented? In what way it is, what way it is not?
+
+Multi-Threading Interview Questions
+
+    How is multi-threading beneficial? What do we gain out of it? What are the pitfalls and dangers we are faced with when we build multi-threaded systems?
+    In Java, what basic language elements are available to aid multi-threading?
+    What is synchronized, wait, notify?
+    How is notifyAll() different than notify()?
+    What is a Semaphore?
+    What is a Critical Section?
+    What is a Mutex?
+    What is InterlockedIncrement?
+    Can you please implement a Semaphore in Java?
+    There are 2 threads. You want these 2 threads to do some work and then reach a certain point but not proceed until the other thread also reaches a certain point. How do you implement this in Java? How do the 2 threads wait for each other? Once they reach that certain point, how will they know when they both can proceed?
+    There is an array of sorted elements. Assuming that the cost of inter-thread communication is insignificant compared to the cost of accessing these elements, how can we design a multi-threaded algorithm to search for a value within this sorted data set?
+
+Another question:
+
+    In a multi-threaded system, assume that there is 1 writer that modifies the contents of an integer array. There are multiple readers who take consistent snapshots of this array for their use. If the writer definition is as below, what is the reader implementation going to be like?
+
+Writer: declare int c = 0; global variable at the beginning (reader threads can see this variable).
+
+c++;
+write();
+c++;
+
+Assume that c++; is an atomic operation.
+SQL and Databases Interview Questions
+
+    What is a Primary Key?
+    What is a Candidate Key?
+    What is a Unique Key?
+    What is Index?
+    What is Unique Index?
+    What is Cluster Index?
+    What are ACID properties?
+    What is a transaction?
+    How do you start a transaction, how do you end it?
+    What is 2 phase commit? When is it needed?
+    What is DDL, what is DML?
+    What are commonly used isolation levels? Their names? Their purpose?
+    How does READ_UNCOMMITED differ compared to READ_COMMITED? Are there differences between major databases with regard to isolation levels? Can you compare READ_COMMITTED isolation level of Oracle versus DB2 or SQL Server?
+    When would you use READ_UNCOMMITED? READ_COMMITTED? REPEATABLE_READ? SERIALIZEABLE_READ? What are the cons and pros?
+    What is a shared lock? What is an exclusive lock? When would a database acquire these locks?
+    There is an EMPLOYEES(ID, NAME, MANAGER_ID) table. MANAGER_ID points to the ID column of the same table. Given a manager name (assuming ID is unique and NAME is unique), what kind of SQL query would you write to retrieve all employees directly managed by this manager? What is the query to get employees 2 levels down? Is there a way to write a query to get employees N levels down? Is there another way of organising this table (different columns?) to hold these kinds of tree structures?
+    What is a View? How is a View useful?
+    What is a Trigger? How is a Trigger useful?
+    What is a Stored Procedure? How is a Stored Procedure useful?
+    What is a sub select query?
+    What is a correlated sub select?
+
+Miscellaneous
+
+    What is a calling convention such as cdecl or stdcall? What are the differences between cdecl, stdcall and pascal calling conventions? Why do we care about them? What is the calling convention used in Windows API?
+    In cdecl calling convention, who maintains the stack when a function is called? The caller, or the called function? In what direction are the parameters passed? Left to right, or right to left?
+    In Pascal (or Delphi) can you write a printf(...) function that takes variable number of arguments as in C? Why not?
+    In C, is it Ok to have lots of return statements in a function? How does this compare to having lots of exit calls in a Pascal (Delphi) function?
+    When do we use increment like i++ versus ++i ?
+    What is a strongly typed language? Is C type safe? How about C++? What about Java libraries? What does Java 5 bring into picture to improve type safety?
+    In Java, what is a Soft Reference, Weak Reference, and Phantom Reference? When do we need them?
+    How would you count the set bits of a 16 bit integer?
+
+Interview Puzzles
+
+    You want to climb a mountain. But you do not have enough food or water to carry along with you yourself. What would you do? (Ideas: You could carry food half way with multiple trips and that point would become your new base, you would start building a new base higher repeating the same process until you reach the ground. Alternatively, you could start with 100 people, they all go to 1st base, then with the help of the resources that this 100 people brought to the first base, 20 of them continue to go to 2nd base which is higher, and then maybe 4 could go higher and at last 1 could reach the top and the mountain would be conquered by the team. You get the idea.)
+    There is a paper, it is divided into squares like a checker board. To get each square separated, how many times would you need to cut this paper? (Let’s say it is 5x5 checker board). How many cuts would you need if the square index number 2x2 was already missing? What if 2x1 is missing? What if 2x2 and 2x3 is missing? Is there a mathematical formula? Can you calculate how many cuts is needed given the size of the paper (5x5 for example) and which squares are already cuts out (missing)?
+    There are 23 prisoners in a prison. The guard tells them that whenever he wants, he will take 1 of them to a room where there are 2 switches. Each switch is either on or off. The prisoner must switch one of the switches and then go back to his cell. At any time if a prisoner correctly tells the guard that all 23 of them have been to that room at least once, then they will all be freed. Any wrong answer will lead them all to death. The prisoners will have a one time meeting together to decide on their strategy before this process starts. Nobody knows the initial state (on or off) of the switches. What should be their strategy to become free?
+
+As part of your phone interview, or email correspondence with the hiring company, you may be asked to write a small program to solve a problem that they describe. You may submit it via email or if you are developing a website, you might as well include the source code online and provide a visually appealing presentation via html page with syntax higlighting your code.
+Interview Soft Questions
+
+    How would you describe your own code?
+    What is the end to end process that you use to write a function (or a group of them)?
+    If you add the total time you spend on coding, design and architecture, how much time did you spend writing code versus designing software?
+    Have you ever worked with a hard to work person, how did you go about that? What kind of problems did arise? How did you solve them?
+
+Share interview questions with your friends:
+

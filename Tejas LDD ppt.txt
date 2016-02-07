@@ -1,0 +1,70 @@
+#### this file was prepared as a part of the preperation for an LDD ppt in tejas. but then vijayt said no need to get that deep into the details, hence the completion of this file was called off ###
+
+kernel modules:
+is unlinked object code (ELF). which can be inserted (linked) and removed (unlinked) from the kernel executable dynamically.. how ??
+cannot include library headers
+must include the kernel source libraries
+insmod, rmmod, modprobe
+/proc/modules
+ads and disads of this approach
+
+kernel code is not swapped. it stays in physical RAM at all times <-- confirmed from vijayt
+kernel is not pageable
+
+insmod linking and loading. how...
+an LKM ELF has the following sections:
+.text (instructions)
+.init.text (init_module code)
+.exit.text (exit_module code)
+.modinfo (version of kernel source tree used to compile the module)
+__versions (module version data)
+.data (initialized data)
+.bss (uninitialized data)
+__ksymtab (exported symbols and addresses to be included in ksyms)
+.kstrtab (exported symbols and addresses to be included in ksyms)
+.etc..
+
+insmod uses query_module to resolve unresolved references and patches them in the .text section (eg: register_chrdev)
+
+
+contd... http://tldp.org/HOWTO/html_single/Module-HOWTO/
+loading the kernel as well as LKM
+
+
+
+An attempt of a very short explanation:
+virtual memory is subdivided into "page frames", in ia32 these are 4KB.
+Likewise, physical memory is subdivided into "pages", again 4KB in size.
+There is a piece of hardware, the Memory Management Unit (MMU) which
+takes a virtual address coming out of the CPU and replaces this by a
+physical address, in the simplest case by a table-lookup: The upper 20
+bits (the page frame number) of a 32-bit virtual address selects one of
+the 1048576 slots in the table. This slot contains a bit "valid" and the
+upper 20 bits (the page number) of the physical address. If the "valid"
+bit is 0, then this virtual address is invalid and the access is aborted
+(SIGSEGV). If the "valid" bit is 1, the 20 bits "page frame number" is
+replaced by the 20 bits "page number",keeping the lower 12 bits of the
+(virtual) address. That 32 bit value is then used as the physical address.
+When switching between processes, the kernel has to replace the low
+786432 entries in this table by the low 786432 entries of the new
+process' table. Also, you need two tables: one for kernel and one for
+the currently active user process, the kernel's low 786432 entries are
+identical to the user process' low 786432 entries. The upper 262144 of a
+user process' table _always_ have the "valid" bit cleared.
+
+special C features to be addressed:
+volatile
+__attribute__ ((packed))
+static
+
+topics keywords:
+system call interrupt
+types of addresses
+interrupts priority
+devices discovery
+bucket system of allocating memory
+sleeping corner cases (ribini)
+ioremap: port mapped (inb, outb) and memory mapped (readb, writeb) io
+    ads and disads: normal memory instructions apply + - = | & ~
+coding disciplines from DD_man link
+
