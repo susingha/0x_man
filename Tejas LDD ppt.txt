@@ -31,6 +31,8 @@ contd... http://tldp.org/HOWTO/html_single/Module-HOWTO/
 loading the kernel as well as LKM
 
 
+1048576 (2^20) = 262144 (2^18) + 786432
+
 
 An attempt of a very short explanation:
 virtual memory is subdivided into "page frames", in ia32 these are 4KB.
