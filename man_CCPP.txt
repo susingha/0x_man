@@ -376,6 +376,7 @@ it could mean:
 2. copy contents of file2 to file1 (needs to be implemented using deep copy)
 have a read...
 http://icu-project.org/docs/papers/cpp_report/the_anatomy_of_the_assignment_operator.html
+https://brochure.jrcs3.com/2018/05/4-pillars-of-object-oriented.html?m=1
 
 
 #include<typeinfo>
