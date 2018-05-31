@@ -1,0 +1,12 @@
+https://brochure.jrcs3.com/2018/05/4-pillars-of-object-oriented.html?m=1
+
+4 Pillars of Object Oriented Programming Cheat Sheet
+Another cheat sheet for interviewing. 
+I think of the 4 pillars consisting of 2 coins. Abstraction / Encapsulation and Inheritance / Polymorphism. So here they are:
+Abstraction – Look at the thing we are modeling: What is it? What are its characteristics? What does it do? Make the object as simple as possible and don't include unnecessary functionality. Data Hiding for simplification.
+Encapsulation – Create a black box around the how. You interact with an object through public properties (setters and getters) and methods. Data Hiding for security.
+Both Abstraction and Encapsulation are about all about hiding stuff from us. Protecting us from unnecessary complexity. Abstraction takes place when we fill out our CRC cards when we are designing our classes and Encapsulation takes place when we actually write the code.
+
+Inheritance – Reuse code! A child class inherits from a parent, from a grandparent, from great grandparent, and so on .. I think of examples of class hierarchies, like Animal, Dog, Pitbull, etc.
+Polymorphism – From "many forms": A child can be substituted for the parent. If you cast a Pitbull as a Dog, you can call the Dog.Bark() method and the Pitbull.Bark() will be run (if it has been overridden). Also, you can have a collection of Dogs, and issue the Bark() command on each of them without caring which kind of Dog is barking (Pitbull or Corgi).
+I think of Inheritance and Polymorphism as cause and effect. Because a Pitbull is derived from Dog (Inheritance), the Pitbull can bark like a Dog (Polymorphism).
