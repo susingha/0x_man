@@ -22,6 +22,7 @@ git mv previous_name new_name
 links:
 https://github.com/issues
 http://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration
+https://docs.gitlab.com/ee/topics/git/numerous_undo_possibilities_in_git/
 
 
 
