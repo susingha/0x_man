@@ -140,10 +140,21 @@ some terms related to virtual to physical address translation:
 TLB hit, TLB miss
 TLB is implemented as a Content Addresseable Memory
 in case of a TLB miss, we go for a page walk and fill in the TLB.
-if page walk fails, it raises a page fault. and the requested virtual address is loaded to the memory from HD and new page tables are setup (swap out may/maynot happen) and TLB is filled again
-in case of a context switch from process to process, the TLB is flushed.
+if page walk fails, it raises a page fault. and the requested virtual address is loaded to the memory from HD / Swap and new page tables are setup (swap out may/maynot happen) and TLB is filled again
+in case of a context switch from process to process, the TLB is flushed. by reloading cr3 register
 in case of a context switch from thread to thread of a process the TLB is NOT flushed. this is not a context switch at all
 read: http://www.linuxjournal.com/article/3814?page=0,1
+
+Page Tables and TLB (Translation Lookaside Buffer):
+TLB is a CPU cache for the page table lookups to do fast virtual to physical translation
+who does the memory translation TLB or Page Tables.
+- First time the translation is done by page table, then its cached in TLB.
+- Next time the same virtual address translation is done by the TLB
+- TLB stores the most recent lookups done via page tables
+- TLB is flushed at every process context switch
+- TLB may not be flushed if the next process has small time slice and would context switch back to original process
+where does TLB stay and where does Page Tables stay.
+- TLB is a part of the CPU's MMU. Page tables stay in kernel space RAM memory.
 
 
 

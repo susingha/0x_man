@@ -1,0 +1,180 @@
+
+
+
+
+virtual memory
+kmalloc, allocation limits
+vmalloc, allocation limits
+slab allocator
+buddy allocator
+kmem cache - kmem_cache_create
+contiguous in virtual
+contiguous in physical
+page swap
+page fault: https://en.wikipedia.org/wiki/Page_fault
+page fault minor: update entry in page table
+page fault major: page swap
+page fault invalid: SIGSEGV (segfault)
+thrashing
+get_free_pages
+GFP_KERNEL
+GFP_ATOMIC
+GFP_USER
+GFP_DMA
+
+
+
+page table lookup: where is the page table
+https://jvns.ca/blog/2016/12/03/how-much-memory-is-my-process-using-/
+https://manybutfinite.com/post/how-the-kernel-manages-your-memory/
+https://www.kernel.org/doc/gorman/html/understand/understand006.html
+https://lwn.net/Articles/106177/
+read_cr2() returns which virtual address was accessed
+virtual addresses range:
+	task_struct.mm_struct.vm_area_struct
+	current->mm->mmap
+page global directory: 
+	task_struct.mm_struct.pgd_t
+	current->mm->pgd
+2 level page table:
+PDG - page global directory
+PMD - page middle directory
+PTE - page table entr
+    - contains bits to indicate physical memory page or swap index
+
+page table switch at context switch / TLB flush
+next-process-task-struct->mm->pgd is loaded into cr3 register
+which results in flushing of the TLB cache
+hence context switch
+
+kernel also has its own page table.
+so that kmalloc and vmalloc works
+
+process
+pid
+bss
+data
+text
+env variables
+heap, program break
+stack
+thread stack ??
+mmap
+shared libraries
+malloc limits
+free
+brk, sbrk
+
+
+kernel stack
+cpu registers
+mode switch
+context switch
+context switch while in kernel mode <----------------------
+context save
+trap sotirq 0x80
+syscalls
+syacall lookup table
+copying arguments from userspace to kernel space via cpu registers
+3GB - 1GB split
+3GB - 1GB split among all processes
+
+
+
+
+fork
+
+PDT (process descriptor table)
+PCB (process control block)
+current
+LDT
+GDT
+mmap
+
+
+exec
+https://lwn.net/Articles/631631/
+copy on write <----------------------
+loading
+linking static
+linking dynamic
+linking shared libraries
+executing binaries
+executing scripts
+
+
+
+
+process states:
+  created
+  ready
+  R - running
+  T - stopped (ctrl+z - SIGSTOP, SIGCONT)
+  D - wait on io
+    - wait on swap
+  Z - zombie
+      killed
+process signals
+process state change on system call
+schedule
+scheduler algorithms
+timeslice / quantum
+
+ptrace - how it works
+https://idea.popcount.org/2012-12-11-linux-process-states/
+https://blog.0x972.info/?d=2014/11/13/10/40/50-how-does-a-debugger-work
+
+
+File Systems
+page cache and buffer cache
+https://manybutfinite.com/post/page-cache-the-affair-between-memory-and-files/
+https://www.thomas-krenn.com/en/wiki/Linux_Page_Cache_Basics#Page_Cache_or_Buffer_Cache
+struct file, file_operations
+struct inode, inode_operations
+struct dentry, dentry_operations
+inode - in-memory and on-disk
+https://linux-kernel-labs.github.io/master/labs/filesystems_part2.html
+http://prashantagmnnit.blogspot.com/2014/03/os-incore-inode-vs-disk-inode.html
+http://books.gigatux.nl/mirror/kerneldevelopment/0672327201/ch12lev1sec7.html
+
+
+
+CPU Caches:
+TLB cache (in MMU)
+Instruction cache
+Memory cache
+
+
+
+
+cli commands
+free - will show page info in physical and swap
+cat /proc/meminfo
+cat /proc/cpu
+cat /proc/interrupts
+cat /proc/irq/21/spurious
+cat /proc/pid/maps
+pmap pid
+top -p pid
+top
+df -h
+df -i - list inode data
+ls -li - shows inode number of a file
+sync - to flush the buffer cache
+
+
+
+?
+inline cache
+look aside cache
+
+
+
+
+
+
+
+
+
+
+

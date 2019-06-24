@@ -1,25 +1,16 @@
 man_DSA.txt
 ===========
 
-what's map reduce  algorithm. map and reduce in context of parallel programming
-lock free data structures ?? in research. very difficult to find a perfectly lock free data structure.
-                                          use existing implementations
-
 
 study median of medians algorithm and k selection algorithm
 use quick select algorithm. its O(n)
 http://blog.teamleadnet.com/2012/07/quick-select-algorithm-find-kth-element.html
-
-good read about min heap, insertion, extraction
-http://cs.stackexchange.com/questions/524/does-there-exist-a-priority-queue-with-o1-extracts
 
 BFS v DFS
 
 BFS is guaranteed to find a solution and the shortest path if it exists.
 DFS may / may not get into a inf loop or a redundant loop (with depth limits)
 DFS takes less memory
-
-coupon collector problem ??
 
 
 man_DD.txt
@@ -32,19 +23,6 @@ in the page table, its detected first by the MMU, cuz its not able to find a phy
 the MMU siganls the processor at do_page_fault(). the function has to find out
 which process sent the page fault: by accessing current
 which address was faulted by reading hardware register by calling read_cr2()
-
-
-allocating memory in kernel ?
-better allocate all needed memory right in the beginning, so that
-we may do 3 mallocs and do some work1 and then do another malloc which fails, we now have to undo work1 and
-free the previous 3 mallocs.
-
-kmalloc(), _get_free_pages() and alloc_pages() - the deal, who calls who:
-kmalloc calls _get_free_pages calls alloc_pages
-kmalloc and _get_free_pages returns a virtual address
-    hence GFP_HIGHMEM cannot be used with these functions. HIGHMEM are not mapped physical to virtual
-    GFP_HIGHMEM can be used with alloc_pages() though, it will return a struct page which will have virtual = NULL
-alloc_pages returns the address of the first struct page allocated
 
 HIGHMEM:
 highmem is not by default mapped (not given a virtual address in its page struct)
@@ -62,7 +40,7 @@ free_pages (opposite of _get_free_pages) and _free_pages (opposite of alloc_page
 vmalloc also allocates from a similar pool but just that it calls _get_free_pages many times in small small amounts to satisfy
 a physically discontiguous range of allocated virtual address space
 
-highly frequest allocations and deallocations:
+highly frequest allocations and deallocations: (look aside caches)
 things like inode / task_struct are so frequently allocated and deallocated that going down to
 _get_free_pages or alloc_pages everytime may result in huge fragmentations. so maintain preallocated slabs
 also called caches to grabbing releasing such structures. kmalloc itself is built on top of such a slab allocator.
@@ -81,20 +59,17 @@ kmalloc returns the virtual address
 alloc_pages returns the struct page pointer (which is virtual in itself) and the virtual member variable contains the
 virtual address for this physical page. how do we get the physical address from this page struct ??
 
-TLB and page tables:
-who does the memory translation TLB or Page Tables. Both. TLB is just a cache for the page table translations
-where does TLB stay and where does Page Tables stay. TLB is a hardware cache for the MMU to do fast virtual to physical lookups
 
-
-every process stack has a corresponding kernel stack ?? reserved for when system calls are made ??
+Every process stack has a corresponding kernel stack ??
+- Yes.
+The kernel version of process stack is reserved for when system calls are made ??
+- Yes
 the EIP keeps switching between the kernel stack and the process stack across system calls ??
-if per process:
-when is the kernel stack created at process creation time or after the first system call is made.
-if not per process:
-is it a pool precreated as a set for future use. is a kernel stack shared or reused among processes ??
-how many kernel stacks in general (or how many contexts)
-    Robert Love: Memory management chapter:
-    =======================================
+- No. EIP register stores instruction pointer. instructions are read from text space, not from stack.
+  The local variables and function call stack frames are allocated keeps switching between the two stacks
+
+Robert Love: Memory management chapter:
+=======================================
 Statically allocating on the stack:
     The size of the per process kernel stack depends on both the architecture and a compile time option
     Historically the kernel stack has been two pages per process. This is usually 8KB for 32 bit archs and 16KB for 64 bit archs
@@ -111,6 +86,8 @@ Single page kernel stacks:
     single 'per processor' (not per process) used for interrupt handlers. With this option interrupt handlers no longer
     share the kernel stack of the interrupted process. Instead they use their own stacks. This consumes only a single page per processor.
     [sup: so interrupt stacks are different from process stacks, so the process resuming is no more a problem]
+    - No. Interrupt handlers still are not given a process context. So there is not PCB to get back to.
+    - Well then what happens when an isr2 interrupts another isr1. isr1 is resumed after isr2 is done or isr1 just falls off incomplete
     unbounded recursion and allocs() are obviously not allowed (?? what are these) 
     stack overflows are silent and dangerous. there is no protection in the kernel
 
