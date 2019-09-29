@@ -5,6 +5,7 @@
 virtual memory
 kmalloc, allocation limits
 vmalloc, allocation limits
+https://kaiwantech.wordpress.com/2011/08/17/kmalloc-and-vmalloc-linux-kernel-memory-allocation-api-limits/
 slab allocator
 buddy allocator
 kmem cache - kmem_cache_create
